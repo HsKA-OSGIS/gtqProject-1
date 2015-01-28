@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="style.css"/>
+
+<head>
+	<title>gtQ</title>
+	
+</head>
+<body>
+
+	<div id="wrapper">
+
+		<div class="clearfix"></div>
+
+		<header class="header">
+ 
+			<h1>gtQ Routing Service - RoadsUncensored</h1>
+
+		</header>
+
+		<nav class="main-menu">
+
+			<ul>
+
+				<li><a href="./home.html">Home Page</a></li>
+			
+					<li><a>gtQ Routing</a></li>
+			
+				<li><a href="./places.html">Places of Interest</a></li>
+				<li><a href="./about.html">About</a></li>
+				
+
+			</ul>
+
+		</nav>
+		<div style="float: left">
+<div style="float: right; width: 1020px; height: 548px" id="map"></div>
+
+<script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+  <script>
+    map = new OpenLayers.Map("map");
+    map.addLayer(new OpenLayers.Layer.OSM());
+    
+    epsg4326 =  new OpenLayers.Projection("EPSG:4326"); //WGS 1984 projection
+    projectTo = map.getProjectionObject(); //The map projection (Spherical Mercator)
+   
+    var lonLat = new OpenLayers.LonLat( 28.0577, -26.1598 ).transform(epsg4326, projectTo);
+          
+    
+    var zoom=12;
+    map.setCenter (lonLat, zoom);
+    var vectorLayer = new OpenLayers.Layer.Vector("Overlay");
+	
+	var params = {
+    LAYERS: 'pgrouting:pgrouting',
+    FORMAT: 'image/png'
+  }
+
+  // The "start" and "destination" features.
+  var startPoint = new ol.Feature();
+  var destPoint = new ol.Feature();
+
+  // The vector layer used to display the "start" and "destination" features.
+  var vectorLayer = new ol.layer.Vector({
+    source: new ol.source.Vector({
+      features: [startPoint, destPoint]
+    })
+  });
+  map.addLayer(vectorLayer);
+
+  // A transform function to convert coordinates from EPSG:3857
+  // to EPSG:4326.
+  var transform = ol.proj.getTransform('EPSG:3857', 'EPSG:4326');
+
+  // Register a map click listener.
+  map.on('click', function(event) {
+    if (startPoint.getGeometry() == null) {
+      // First click.
+      startPoint.setGeometry(new ol.geom.Point(event.coordinate));
+    } else if (destPoint.getGeometry() == null) {
+      // Second click.
+      destPoint.setGeometry(new ol.geom.Point(event.coordinate));
+      // Transform the coordinates from the map projection (EPSG:3857)
+      // to the server projection (EPSG:4326).
+      var startCoord = transform(startPoint.getGeometry().getCoordinates());
+      var destCoord = transform(destPoint.getGeometry().getCoordinates());
+      var viewparams = [
+        'x1:' + startCoord[0], 'y1:' + startCoord[1],
+        'x2:' + destCoord[0], 'y2:' + destCoord[1]
+      ];
+      params.viewparams = viewparams.join(';');
+      result = new ol.layer.Image({
+        source: new ol.source.ImageWMS({
+          url: 'http://localhost:8082/geoserver/pgrouting/wms',
+          params: params
+        })
+      });
+      map.addLayer(result);
+    }
+  });
+  
+
+		
+
+  var clearButton = document.getElementById('clear');
+  clearButton.addEventListener('click', function(event) {
+    // Reset the "start" and "destination" features.
+    startPoint.setGeometry(null);
+    destPoint.setGeometry(null);
+    // Remove the result layer.
+    map.removeLayer(result);
+  });
+  </script>
+     <br>
+		</div>
+
+		<div style="float: left" class="aside">
+
+			
+		 <h2>Explore City of Johannesburg</h2>
+	
+		 
+		 
+		 <button id="clear" style="position: relative; top:370px;"/>Clear Selected Points</button>
+		 
+		 <br> 
+		
+		<button id="LiveTraffic" style="position: relative; top:0.5px;" onclick = "location.href='https://www.i-traffic.co.za/traffic/map.aspx?region=gp'"/>Live Traffic in Johannesburg</button>
+		<br>
+		 
+		 
+		 
+		
+	
+		
+	</div>
+	<footer class="main-footer">
+
+							<div id="footer_text">
+				Maclean Commey & Monale Langa &#160; | &#160; Open Source GIS Project &#160; |  © 2015
+				</div>
+
+		</footer>
+	
+
+</body>
+</html>
