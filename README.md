@@ -51,7 +51,7 @@ Applications
 #How to load ‘gtQ’ client application in Apache httpd web server
 
 * All files are simple to run and easy to understand
-* The application has been tested with Apache httpd 2.4.7
+* The application can been tested with Apache httpd 2.4.7
 * Clone this repository into your local folder (say, 'gtq')
 * Copy the ‘gtqProject’ folder in /var/www/html folder of OSGeo-Live
 * The home.html within 'Manhattan' will be visible in the browser at location http://localhost:80/manhattan/       (localhost/gtqproject as shortcut)
@@ -66,4 +66,4 @@ Please do refer to the License Section.
 
 Maclean Commey - macgeomatics@gmail.com
 
-Monale Langa - sepharihla@gmail.com
+Monale Langa   - sepharihla@gmail.com
