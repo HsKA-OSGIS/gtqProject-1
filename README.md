@@ -52,9 +52,9 @@ Applications
 
 * All files are simple to run and easy to understand
 * The application can been tested with Apache httpd 2.4.7
-* Clone this repository into your local folder (say, 'gtq')
+* Clone this repository into your local folder (say, 'gtqProject')
 * Copy the ‘gtqProject-1’ folder in /var/www/html folder of OSGeo-Live
-* The home.html within 'gtq' will be visible in the browser at location http://localhost:80/gtq/       (localhost/gtqproject as shortcut)
+* The home.html within 'gtqProject' will be visible in the browser at location http://localhost:80/gtqproject/ (localhost/gtqproject as shortcut)
 * If you want to create more advanced or virtual locations, then create a new configuration in /etc/apache2/conf-available folder
 
 
